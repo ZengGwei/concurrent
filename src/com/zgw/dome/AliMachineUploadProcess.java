@@ -7,10 +7,7 @@ import com.alipay.api.domain.AntMerchantExpandAutomatApplyUploadModel;
 import com.alipay.api.domain.SmartAddressInfo;
 import com.alipay.api.request.AntMerchantExpandAutomatApplyUploadRequest;
 import com.alipay.api.response.AntMerchantExpandAutomatApplyUploadResponse;
-import com.dianwandashi.game.beans.AliMachineUploadBean;
-import com.dianwandashi.game.constants.PropertiesConstant;
-import com.dianwandashi.game.service.IStoreService;
-import com.xiaozhu.http.JsonHelper;
+
 import org.apache.log4j.Logger;
 
 import java.util.Date;
@@ -45,11 +42,11 @@ public class AliMachineUploadProcess extends Thread {
         while (true){
             try {
                 AliMachineUploadBean deviceInfo = this.deviceInfo.take();
-                AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", PropertiesConstant.ALI_APP_ID,
-                        PropertiesConstant.ALI_APP_PRIVATE_KEY,"json","GBK",PropertiesConstant.ALI_APP_KEY,"RSA2");
+                AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", "",
+                       "","json","GBK","","RSA2");
                 AntMerchantExpandAutomatApplyUploadRequest request = new AntMerchantExpandAutomatApplyUploadRequest();
                 AntMerchantExpandAutomatApplyUploadModel model = new AntMerchantExpandAutomatApplyUploadModel();
-                model.setTerminalId(deviceInfo.getDeviceNo());
+//                model.setTerminalId(deviceInfo.getDeviceNo());
                 model.setMerchantUserId("2088621196133228");
                 model.setProductUserId("2088621196133228");
                 model.setMachineType("ROCKING_MACHINE");
@@ -63,21 +60,21 @@ public class AliMachineUploadProcess extends Thread {
                 deliveryAddress.setMachineAddress("浙江省杭州市余杭区***********");
                 model.setDeliveryAddress(deliveryAddress);
                 SmartAddressInfo addressInfo = new SmartAddressInfo();
-                addressInfo.setProvinceCode(deviceInfo.getProvinceCode());
-                addressInfo.setAreaCode(deviceInfo.getAreaCode());
-                addressInfo.setCityCode(deviceInfo.getCityCode());
-                addressInfo.setMachineAddress(deviceInfo.getMachineAddress());
+//                addressInfo.setProvinceCode(deviceInfo.getProvinceCode());
+//                addressInfo.setAreaCode(deviceInfo.getAreaCode());
+//                addressInfo.setCityCode(deviceInfo.getCityCode());
+//                addressInfo.setMachineAddress(deviceInfo.getMachineAddress());
                 model.setPointPosition(addressInfo);
                 model.setMerchantUserType("ISV");
                 request.setBizModel(model);
-                logger.info("机具入驻  入参model："+ JsonHelper.bean2json(model));
+//                logger.info("机具入驻  入参model："+ JsonHelper.bean2json(model));
                 AntMerchantExpandAutomatApplyUploadResponse response = alipayClient.execute(request);
-                logger.info("机具入驻  出参response："+ JsonHelper.bean2json(response));
+//                logger.info("机具入驻  出参response："+ JsonHelper.bean2json(response));
                 if(response.isSuccess()){
-                    iStoreService.setDeviceUpload(deviceInfo.getDeviceNo());
-                    logger.info("机具入驻   成功："+ JsonHelper.bean2json(deviceInfo));
+//                    iStoreService.setDeviceUpload(deviceInfo.getDeviceNo());
+                    logger.info("机具入驻   成功：" );
                 } else {
-                    logger.info("机具入驻   失败："+ JsonHelper.bean2json(deviceInfo));
+                    logger.info("机具入驻   失败：" );
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
