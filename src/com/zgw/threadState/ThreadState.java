@@ -7,7 +7,8 @@ import java.util.concurrent.TimeUnit;
  * 线程状态：new   runnable  waiting  time_waiting blocked   terminated
  * <p>
  * 查看 jps  -> jstack ID
- *
+ * 线程安全中断的两种方式；
+ * 中断是线程的一种状态标识
  * @author gw.Zeng
  * @create 2019/5/29
  * @since 1.0.0

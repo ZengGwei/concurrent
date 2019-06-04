@@ -52,7 +52,7 @@ public class ThreadStop {
 
         @Override
         public void run() {
-            while (on && !Thread.currentThread().isInterrupted()){
+            while (on && !Thread.currentThread().isInterrupted()){//Thread.currentThread().isInterrupted()// 返回状态 true 复位
                 i++;
             }
             System.out.println("count i="+i);
@@ -74,7 +74,7 @@ public class ThreadStop {
                 Thread.sleep(1000);
                 Integer integer = data.get();
                 System.out.println(currentThread().getName() + " :" + integer);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException e) {//复位
                 e.printStackTrace();
             }
         }, "sub Thread-2");
