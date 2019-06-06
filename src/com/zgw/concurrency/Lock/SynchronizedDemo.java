@@ -1,4 +1,4 @@
-package com.zgw.concurrency.dome;
+package com.zgw.concurrency.Lock;
 
 /**
  * 〈〉

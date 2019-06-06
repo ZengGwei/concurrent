@@ -1,4 +1,4 @@
-package com.zgw.concurrency.dome;
+package com.zgw.concurrency.Lock;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
