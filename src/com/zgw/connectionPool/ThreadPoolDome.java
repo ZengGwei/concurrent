@@ -18,6 +18,7 @@ public class ThreadPoolDome {
         for (int i = 0; i <10 ; i++) {
             executorService.submit(new taskThread());
         }
+        executorService.shutdown();
 
     }
 

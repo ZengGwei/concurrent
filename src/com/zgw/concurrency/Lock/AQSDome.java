@@ -34,25 +34,31 @@ public class AQSDome {
 //同步器实现分析{}
 
     /**
-     * 1.同步队列（一个FIFO双向队列）
+     * *1.同步队列（一个FIFO双向队列）
      * 当线程获取同步状态失败-->同步器会将当前线程以及等待状态等信息构成一个节点 加入同步队列
      * 同时会阻塞当前线程，当同步状态释放时，会把首节点线程唤醒，使其再次尝试获取同步状态。
      * <p>
-     *      NODE 节点 包含   int waitStatus;  Node prev; Node next;   Thread thread;  Node nextWaiter;
-     *    没有成功获取同步状态的线程会成为节点加入该队列的尾部
-     *
-     * 2.独占式同步状态获取与释放
-     *      同步器的 acquire(int arg) 方法可以获取同步状态。
-     *      public final void acquire(int arg) { if (!tryAcquire(arg) && acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
-     *             selfInterrupt();
-     *     }
-     *     主要完成了同步状态获取{@tryAcquire(arg)}、节点构造、加入同步队列{@addWaiter(Node.EXCLUSIVE), arg)}以及在同步队列中自旋等 待的相关工作，
-     *
-     *     节点进入同步队列后，不断自旋{@acquireQueued()
+     * NODE 节点 包含   int waitStatus;  Node prev; Node next;   Thread thread;  Node nextWaiter;
+     * 没有成功获取同步状态的线程会成为节点加入该队列的尾部
+     * <p>
+     * **************************************
+     * * 2.独占式同步状态获取与释放
+     * 同步器的 acquire(int arg) 方法可以获取同步状态。
+     * public final void acquire(int arg) { if (!tryAcquire(arg) && acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+     * selfInterrupt();
+     * }
+     * 主要完成了同步状态获取{@tryAcquire(arg)}、节点构造、加入同步队列{@addWaiter(Node.EXCLUSIVE), arg)}以及在同步队列中自旋等 待的相关工作，
+     * <p>
+     * 节点进入同步队列后，不断自旋{@acquireQueued()
+     * 总结：
+     * 在获取同步状态时，同步器维 护一个同步队列，获取状态失败的线程都会被加入到队列中并在队列
+     * 中进行自旋；移出队列 或停止自旋）的条件是前驱节点为头节点且成功获取了同步状态。在释放同
+     * 步状态时，同步 器调用tryRelease(int arg)方法释放同步状态，然后唤醒头节点的后继节点。
+     * ********************************************
+     * *3.共享式同步状态获取与释放
      *
      *
      */
-
 
 
     public static void main(String[] args) {

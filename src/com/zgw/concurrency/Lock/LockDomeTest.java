@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class LockDomeTest {
     //Lock API
-    static Lock lock = new ReentrantLock();//重入锁
+    static Lock lock = new ReentrantLock(true);//重入锁
 //    Condition condition = new Condition();
     public static void main(String[] args) {
         try {
@@ -31,12 +31,5 @@ public class LockDomeTest {
         }finally {
             lock.unlock();
         }
-
-
-
-
-
     }
-
-
 }
