@@ -7,8 +7,8 @@ package com.zgw.connectionPool;
  * @create 2019/6/4
  * @since 1.0.0
  */
-public class taskThread implements Runnable{
-    static  int count = 0;
+public class TaskThread implements Runnable{
+    public static  int count = 0;
     @Override
     public void run() {
         count++;
