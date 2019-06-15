@@ -1,5 +1,6 @@
 package com.zgw.connectionPool;
 
+import java.util.List;
 import java.util.concurrent.*;
 
 /**
@@ -31,15 +32,22 @@ import java.util.concurrent.*;
  *     答：有界队列 ：有固定大小的阻塞队列 ；无界队列：无固定大小的阻塞队列
  *
  *5、 线程池是如何实现线程回收的？ 以及核心线程能不能被回收？
- *    答：runWork()
+ *    答：线程池线程回收过程： 工作线程work 的run()方法调用runWork()，runWork()不断循环调用getTask()从workQueue队列中取出任务 执行, 当getTask()返回null时，
+ *       退出循环 执行processWorkerExit(w, completedAbruptly)，processsWorkerExit(w,fasle) 会把该线程从works(hashSet)组中移除,，线程数减1。移除后再判断当前线程数是否
+ *       大于核心线程数，若大于直接结束，若小于核心线程数，在调用addWork(null,false),添加一个线程。所以核心线程数没有被回收。
  *
  *6、 FutureTask是什么
+ *    答： FutureTask 是一个实现了Runable,Future 的的线程类，构造器参数是实现Callable的任务，FutureTask是对有返回值的任务的封装，调用get()方法可以获取返回值
  *
  * 7、Thread.sleep(0)的作用是什么
- *
+ *    答：线程释放    CPU资源，重新与其他线程竞争CPU资源。
  * 8、如果提交任务时，线程池队列已满，这时会发生什么
- *
+ *    答: 当对列已满是，会先尝试 创建一个新线程执行任务，若尝试失败，会执行拒绝策略。 AbortPolicy：直接抛出异常，默认策略；
+ *        CallerRunsPolicy：用调用者所在的线程来执行任务；
+ *        DiscardOldestPolicy：丢弃阻塞队列中靠最前的任务，并执行当前任务；
+ *       DiscardPolicy：直接丢弃任务；
  * 9、如果一个线程池中还有任务没有执行完成，这个时候是否允许被外部中断？
+ *    答： 可以 ，调用 shutDownNow()返回未执行任务,队列中未执行的任务不会再执行。
 
  */
 public class ThreadPoolDome {
@@ -65,14 +73,29 @@ public class ThreadPoolDome {
 
     //
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws ExecutionException, InterruptedException, TimeoutException {
         for (int i = 0; i <20 ; i++) {
 //           singleEX.execute(new TaskThread());
            executor.execute(new TaskThread());
          Future future =  singleEX.submit((Callable<Object>) new TaskThread());
-            System.out.println(future.get());
+            System.out.println(future.get(5,TimeUnit.SECONDS));
+
+            FutureTask futureTask = new FutureTask(new TaskThread());
+            Future<?> submit = singleEX.submit(futureTask);
+            Object o = futureTask.get(5,TimeUnit.SECONDS);
+            System.out.println(o);
+
+
+
         }
-        singleEX.shutdown();
+//        singleEX.shutdown();
+        List<Runnable> runnables = singleEX.shutdownNow();
+
+//        ArrayBlockingQueue que = new ArrayBlockingQueue(8);
+//        for (int i = 0; i <10 ; i++) {
+//            que.offer(i); //
+//        }
+
 
     }
 
