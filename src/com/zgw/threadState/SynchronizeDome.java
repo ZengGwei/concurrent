@@ -10,17 +10,12 @@ package com.zgw.threadState;
 public class SynchronizeDome {
     private static int i;
     public static void main(String[] args) {
-
         synchronized (SynchronizeDome.class){
             i++;
         }
         addOper();
-
     }
-
     public  static synchronized void    addOper(){
         i++;
     }
-
-
 }
